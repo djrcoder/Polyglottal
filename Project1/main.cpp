@@ -116,11 +116,11 @@ int main()
 
 
 
-        
-        
+
+
 
         std::string Speed_str = std::to_string(floor(speed * 10));
-       
+
         sf::Text text("Speed: " + Speed_str, font, 50);
 
 
@@ -161,74 +161,74 @@ int main()
             spriteCar.setRotation(180);
         }
 
-      
 
-        if (x  < 0 || x  > 1920 || y < 0 || y > 1080) {
-                x = 100;
-                y = 100;
-                speed = 0;
-                spriteCar.setRotation(180);
+
+        if (x < 0 || x  > 1920 || y < 0 || y > 1080) {
+            x = 100;
+            y = 100;
+            speed = 0;
+            spriteCar.setRotation(180);
         }
 
 
-if (boundingBox.contains(checkOne))
-{
-    points = points + 2;
-    
-    sound.play();
-}
+        if (boundingBox.contains(checkOne))
+        {
+            points = points + 2;
 
-if (boundingBox.contains(checkTwo))
-{
-    points = points + 2;
-    sound.play();
-}
+            sound.play();
+        }
 
-if (boundingBox.contains(checkThree))
-{
-    points = points + 2;
-    sound.play();
-}
+        if (boundingBox.contains(checkTwo))
+        {
+            points = points + 2;
+            sound.play();
+        }
 
-if (boundingBox.contains(checkFour))
-{
-    points = points + 2;
-    sound.play();
-}
+        if (boundingBox.contains(checkThree))
+        {
+            points = points + 2;
+            sound.play();
+        }
 
-if (points > 500) {
-    points = 500;
-}
+        if (boundingBox.contains(checkFour))
+        {
+            points = points + 2;
+            sound.play();
+        }
 
-    std::string Points_str = std::to_string(points);
-    sf::Text pointsText("Fuel: " + Points_str, font, 50);
+        if (points > 500) {
+            points = 500;
+        }
 
-    pointsText.setPosition(0, 100);
-    spriteCar.setColor(Color::Red);
+        std::string Points_str = std::to_string(points);
+        sf::Text pointsText("Fuel: " + Points_str, font, 50);
 
-    std::string Rand_str = std::to_string(randomX);
-    sf::Text randText("Check Point: " + Rand_str, font, 50);
-    
-    randText.setPosition(0, 200);
+        pointsText.setPosition(0, 100);
+        spriteCar.setColor(Color::Red);
 
-    spriteGem.setPosition(checkOne);
-  
-    game.draw(spriteCar);
-    game.draw(text);
-    game.draw(pointsText);
-    game.draw(randText);
-    game.draw(spriteGem);
-    spriteGem.setPosition(checkTwo);
-    game.draw(spriteGem);
-    spriteGem.setPosition(checkThree);
-    game.draw(spriteGem);
-    spriteGem.setPosition(checkFour);
-    game.draw(noGoZone);
-    game.draw(noGoZoneTwo);
+        std::string Rand_str = std::to_string(randomX);
+        sf::Text randText("Check Point: " + Rand_str, font, 50);
 
-    game.draw(spriteGem);
-    game.display();
-}
-   
+        randText.setPosition(0, 200);
+
+        spriteGem.setPosition(checkOne);
+
+        game.draw(spriteCar);
+        game.draw(text);
+        game.draw(pointsText);
+        game.draw(randText);
+        game.draw(spriteGem);
+        spriteGem.setPosition(checkTwo);
+        game.draw(spriteGem);
+        spriteGem.setPosition(checkThree);
+        game.draw(spriteGem);
+        spriteGem.setPosition(checkFour);
+        game.draw(noGoZone);
+        game.draw(noGoZoneTwo);
+
+        game.draw(spriteGem);
+        game.display();
+    }
+
     return 0;
 }
