@@ -23,7 +23,7 @@ int main()
         int tileY;
     };
 
-    int points = 200;
+    int points = 500;
 
 
     Texture car;
@@ -31,18 +31,27 @@ int main()
     Texture gem;
     Texture nogo;
     Texture nogoTwo;
+    Texture pump;
+    Texture firstBack;
+    Texture treetree;
 
+    firstBack.loadFromFile("firstBack.png");
     nogo.loadFromFile("no.png");
     nogoTwo.loadFromFile("go.png");
     car.loadFromFile("anotherf1.png");
     background.loadFromFile("finaltrack.png");
     gem.loadFromFile("f1.png");
+    pump.loadFromFile("fuelpump.png");
+    treetree.loadFromFile("tree.png");
 
+    Sprite firstB(firstBack);
     Sprite noGoZone(nogo);
     Sprite noGoZoneTwo(nogoTwo);
     Sprite spriteBack(background);
     Sprite spriteCar(car);
     Sprite spriteGem(gem);
+    Sprite spritePump(pump);
+    Sprite spriteTree(treetree);
 
     // 960, 800
 
@@ -51,6 +60,8 @@ int main()
     noGoZoneTwo.setPosition(750, 250);
 
     spriteCar.setPosition(100, 100);
+    spritePump.setPosition(200, 300);
+    spriteTree.setPosition(400, 400);
 
     spriteCar.setOrigin(32 / 2, 32 / 2);
 
@@ -65,10 +76,9 @@ int main()
     float decelerate = 0.2;
     float corner = 0.08;
 
-    sf::Vector2f checkOne = { 400, 200 };
-    sf::Vector2f checkTwo = { 1200, 200 };
-    sf::Vector2f checkThree = { 400, 1000 };
-    sf::Vector2f checkFour = { 1200, 1000 };
+    sf::Vector2f checkOne = { 750, 950 };
+   // sf::Vector2f checkTwo = { 1200, 200 };
+    
 
     float randomX = rand() % 1000 + 1;
 
@@ -87,7 +97,7 @@ int main()
         bool right = 0;
         bool left = 0;
 
-        if (Keyboard::isKeyPressed(Keyboard::Up)) up = 1, points -= 0.1;
+        if (Keyboard::isKeyPressed(Keyboard::Up)) up = 1, points -= 0.05;
         if (Keyboard::isKeyPressed(Keyboard::Down)) down = 1;
         if (Keyboard::isKeyPressed(Keyboard::Right)) right = 1;
         if (Keyboard::isKeyPressed(Keyboard::Left)) left = 1;
@@ -115,27 +125,17 @@ int main()
         y = y - cos(angle) * speed;
 
 
-
-
-
-
         std::string Speed_str = std::to_string(floor(speed * 10));
-
         sf::Text text("Speed: " + Speed_str, font, 50);
 
 
-
-
         game.clear(Color::Black);
+        game.draw(firstB);
+        game.draw(noGoZone);
+        game.draw(noGoZoneTwo);
         game.draw(spriteBack);
+        game.draw(spriteTree);
         text.setFillColor(Color::Red);
-
-
-        // set track
-        // count laps
-        // horn sound
-        // if points = 0 GAME OVER
-
 
         spriteCar.setPosition(x, y);
         spriteCar.setRotation(angle * 180 / 3.14159);
@@ -143,6 +143,7 @@ int main()
 
         sf::FloatRect boundingBox = spriteCar.getGlobalBounds();
         sf::FloatRect colBox = noGoZone.getGlobalBounds();
+        sf::FloatRect pumpBox = spritePump.getGlobalBounds();
         // sf::Vector2f pos = { randomX, randomY };
 
         if (colBox.contains(x, y)) {
@@ -150,6 +151,12 @@ int main()
             y = 100;
             speed = 0;
             spriteCar.setRotation(180);
+        }
+
+        if (pumpBox.contains(x, y)) {
+            points = points + 2;
+
+            sound.play();
         }
 
         sf::FloatRect lowZone = noGoZoneTwo.getGlobalBounds();
@@ -161,8 +168,6 @@ int main()
             spriteCar.setRotation(180);
         }
 
-
-
         if (x < 0 || x  > 1920 || y < 0 || y > 1080) {
             x = 100;
             y = 100;
@@ -170,63 +175,44 @@ int main()
             spriteCar.setRotation(180);
         }
 
+        // if (boundingBox.contains(checkOne))
+        //{
+        //    points = points + 2;
 
-        if (boundingBox.contains(checkOne))
-        {
-            points = points + 2;
-
-            sound.play();
-        }
-
-        if (boundingBox.contains(checkTwo))
-        {
-            points = points + 2;
-            sound.play();
-        }
-
-        if (boundingBox.contains(checkThree))
-        {
-            points = points + 2;
-            sound.play();
-        }
-
-        if (boundingBox.contains(checkFour))
-        {
-            points = points + 2;
-            sound.play();
-        }
+          //  sound.play();
+        // }
 
         if (points > 500) {
             points = 500;
         }
 
+        if (points == 0) {
+            sf::Text gameOver("GAME OVER", font, 300);
+            gameOver.setPosition(0, 400);
+            game.draw(gameOver);
+            speed = 0;
+            //return -1;
+        }
+
         std::string Points_str = std::to_string(points);
         sf::Text pointsText("Fuel: " + Points_str, font, 50);
 
-        pointsText.setPosition(0, 100);
+        pointsText.setPosition(1600, 200);
         spriteCar.setColor(Color::Red);
 
-        std::string Rand_str = std::to_string(randomX);
-        sf::Text randText("Check Point: " + Rand_str, font, 50);
+        // std::string Rand_str = std::to_string(randomX);
+        // sf::Text randText("Check Point: " + Rand_str, font, 50);
 
-        randText.setPosition(0, 200);
+        text.setPosition(1600, 0);
+       // randText.setPosition(1500, 200);
 
-        spriteGem.setPosition(checkOne);
+        spritePump.setPosition(checkOne);
 
         game.draw(spriteCar);
         game.draw(text);
         game.draw(pointsText);
-        game.draw(randText);
-        game.draw(spriteGem);
-        spriteGem.setPosition(checkTwo);
-        game.draw(spriteGem);
-        spriteGem.setPosition(checkThree);
-        game.draw(spriteGem);
-        spriteGem.setPosition(checkFour);
-        game.draw(noGoZone);
-        game.draw(noGoZoneTwo);
-
-        game.draw(spriteGem);
+        // game.draw(randText);
+        game.draw(spritePump);
         game.display();
     }
 
